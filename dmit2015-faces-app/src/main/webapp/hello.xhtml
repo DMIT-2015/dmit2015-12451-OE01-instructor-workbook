@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html">
+<h:head>
+    <title>Hello Faces</title>
+</h:head>
+<h:body>
+    <h:form>
+        <h:outputText value="#{helloWorld.message}"/><br/>
+        <h:inputText value="#{helloWorld.userInput}"/><br/>
+        <h:commandButton value="Submit" action="#{helloWorld.submit}"/>
+    </h:form>
+</h:body>
+</html>
