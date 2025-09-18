@@ -1,0 +1,51 @@
+<!-- This is a Faces composition page that extends the layout template -->
+<ui:composition
+        template="/WEB-INF/faces-templates/layout.xhtml"
+        xmlns:ui="jakarta.faces.facelets"
+        xmlns:h="jakarta.faces.html"
+        xmlns:f="jakarta.faces.core"
+        xmlns:p="primefaces"
+        xmlns:o="http://omnifaces.org/ui">
+
+    <!-- Page metadata for title, description, and keywords -->
+    <ui:param name="title" value="greeting"/>
+
+    <!-- Define main content for the page -->
+    <ui:define name="maincontent">
+        <div class="card">
+            <h1 role="heading" aria-level="1">Greeting Form</h1>
+            <h:form id="greeting_form" role="form">
+                <p:panel header="Welcome to Greeting Form">
+                    <!-- Add page-specific content here, e.g., PrimeFaces components -->
+                    <div class="ui-fluid">
+                        <div class="field">
+                            <p:outputLabel for="@next">Your name:</p:outputLabel>
+                            <p:inputText
+                                id="username"
+                                value="#{greetingBeanRequest.username}"
+                                placeholder="type your name"
+                                />
+                        </div>
+                        <p:commandButton id="submitButton"
+                                         value="Say Hello"
+                                         actionListener="#{greetingBeanRequest.onSubmit()}"
+                                         update=":messages :growl"
+                                         />
+
+                        <p:spacer height="20" />
+
+                        <p:commandButton id="generateButton"
+                                         value="Generate Name"
+                                         actionListener="#{greetingBeanRequest.onGenerateName()}"
+                                         update="username"
+                                         process="@this"
+                                         />
+                        />
+                    </div>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+
+</ui:composition>
