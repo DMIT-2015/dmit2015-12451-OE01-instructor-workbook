@@ -1,0 +1,102 @@
+<!-- This is a JSF composition page that extends the layout template -->
+<ui:composition
+        template="/WEB-INF/faces-templates/layout.xhtml"
+        xmlns:ui="jakarta.faces.facelets"
+        xmlns:h="jakarta.faces.html"
+        xmlns:f="jakarta.faces.core"
+        xmlns:p="primefaces"
+        xmlns:o="http://omnifaces.org/ui">
+
+    <!-- Page metadata for title, description, and keywords -->
+    <ui:param name="title" value="taskManager"/>
+
+    <!-- === Main Content Section === -->
+    <!-- Defines the primary content area rendered in the layout's <ui:insert name="maincontent"> -->
+    <ui:define name="maincontent">
+        <div class="card">
+            <h1 role="heading" aria-level="1">Task Manager</h1>
+
+            <h:form id="weather_form" role="form">
+                <!-- Optional: Set focus on the first input field -->
+                <!-- <p:focus for=":textValue" /> -->
+
+                <p:panel id="formPanel" header="Form Panel" role="region" aria-label="Form Input Panel">
+                    <div class="ui-fluid">
+
+                        <!-- === Form Input Components === -->
+                        <!-- Text input field for capturing string data -->
+                        <div class="field">
+                            <p:outputLabel for="@next" value="Description"/>
+                            <p:inputText id="description"
+                                         value="#{taskManagerSession.newTask.description}"/>
+                        </div>
+
+                        <!-- SelectOneMenu for dropdown selection -->
+                        <!--
+                        <div class="field col-12 md:col-3">
+                            <p:outputLabel for="@next" value="Select One Value"/>
+                            <p:selectOneMenu id="option" >
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
+                            </p:selectOneMenu>
+                        </div>
+                        -->
+
+                        <!-- Buttons for form submission and clearing -->
+
+                        <div class="formgroup-inline">
+                            <div class="field">
+                                <p:commandButton value="Add Task"
+                                                 action="#{taskManagerSession.addTask()}"
+                                                 update=":growl @form weather_tableForm:dataTable"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </p:panel>
+            </h:form>
+
+            <!-- === Data Table for Displaying Records === -->
+            <!-- Ensure rowKey references a unique property in your data model -->
+            <h:form id="weather_tableForm">
+                <div class="card">
+                    <p:dataTable id="dataTable"
+                                 value="#{taskManagerSession.tasks}"
+                                 var="it"
+                                 reflow="true"
+                                 rowIndexVar="rowIndex"
+                                 paginator="true" rows="10"
+                                 role="grid" aria-label="Data Table">
+
+                        <p:column headerText="RowNo">
+                            <h:outputText value="#{rowIndex + 1}" />
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{it.description}" />
+                        </p:column>
+
+                        <p:column headerText="Action">
+                            <p:commandButton id="deleteButton"
+                                             value="Delete"
+                                             icon="pi pi-trash"
+                                             styleClass="ui-button-danger"
+                                             process="@this"
+                                             action="#{taskManagerSession.removeTask(it)}"
+                                             update=":growl dataTable">
+                                <p:confirm header="Delete Confirmation" message="Do you want to delete this record?" icon="pi pi-info-circle"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                    </p:confirmDialog>
+                </div>
+            </h:form>
+
+        </div>
+    </ui:define>
+
+
+</ui:composition>
