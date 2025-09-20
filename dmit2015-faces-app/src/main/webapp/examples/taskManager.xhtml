@@ -32,14 +32,15 @@
                         </div>
 
                         <!-- SelectOneMenu for dropdown selection -->
-                        <!--
                         <div class="field col-12 md:col-3">
-                            <p:outputLabel for="@next" value="Select One Value"/>
-                            <p:selectOneMenu id="option" >
+                            <p:outputLabel for="@next" value="Priority"/>
+                            <p:selectOneMenu id="priority" value="#{taskManagerSession.newTask.priority}">
                                 <f:selectItem itemLabel="Select One" itemValue=""/>
+                                <f:selectItem itemLabel="Low" itemValue="Low"/>
+                                <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                                <f:selectItem itemLabel="High" itemValue="High"/>
                             </p:selectOneMenu>
                         </div>
-                        -->
 
                         <!-- Buttons for form submission and clearing -->
 
@@ -72,8 +73,27 @@
                         </p:column>
 
                         <p:column headerText="Description">
-                            <h:outputText value="#{it.description}" />
+                            <h:outputText value="#{it.description}">
+                                <f:attribute name="styleClass" value="#{it.done ? 'text-decoration: line-through' : ''}" />
+                            </h:outputText>
                         </p:column>
+
+                        <p:column headerText="Priority">
+                            <p:selectOneMenu value="#{it.priority}">
+                                <f:selectItem itemLabel="Select One" itemValue=""/>
+                                <f:selectItem itemLabel="Low" itemValue="Low"/>
+                                <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                                <f:selectItem itemLabel="High" itemValue="High"/>
+                                <p:ajax update="@this" />
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column headerText="Done">
+                            <p:selectBooleanCheckbox value="#{it.done}">
+                                <p:ajax update="@this dataTable" />
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+
 
                         <p:column headerText="Action">
                             <p:commandButton id="deleteButton"
