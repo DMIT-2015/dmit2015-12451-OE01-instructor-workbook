@@ -8,7 +8,6 @@ import net.datafaker.Faker;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.random.RandomGenerator;
 
 @Named("memoryTaskService")
 @ApplicationScoped
@@ -20,14 +19,9 @@ public class MemoryTaskService implements TaskService {
     public void init() {
 
         var faker = new Faker();
-        var randomGenerator = RandomGenerator.getDefault();
+
         for (int counter = 1; counter <= 5; counter++) {
-            var currentTask = new Task();
-            currentTask.setId(UUID.randomUUID().toString());
-            // TODO: Generate fake data for applicable properties
-            // currentTask.setProperty1(faker.providerName.methodName());
-            // currentTask.setProperty2(faker.providerName.methodName());
-            // currentTask.setProperty3(faker.providerName.methodName());
+            var currentTask = Task.of(faker);
 
             tasks.add(currentTask);
         }

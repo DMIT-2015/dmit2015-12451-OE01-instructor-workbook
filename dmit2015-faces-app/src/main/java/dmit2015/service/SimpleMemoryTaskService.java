@@ -42,6 +42,6 @@ public class SimpleMemoryTaskService implements TaskService {
 
     @Override
     public void deleteTaskById(String id) {
-        tasks.remove(getTaskById(id).orElseThrow());
+        tasks.removeIf(t -> t.getId().equals(id));
     }
 }

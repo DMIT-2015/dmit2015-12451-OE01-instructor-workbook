@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.datafaker.Faker;
+
+import java.util.UUID;
+import java.util.random.RandomGenerator;
 
 @Getter
 @Setter
@@ -29,5 +33,17 @@ public class Task {
 
     public static Task copyOf(Task other) {
         return new Task(other);
+    }
+
+    public static Task of(Faker faker) {
+        var task = new Task();
+        task.setId(UUID.randomUUID().toString());
+        task.setDescription(faker.seinfeld().quote());
+        String[] priorities = {"Low","Medium","High"};
+        RandomGenerator rand = RandomGenerator.getDefault();
+        String randomPriority = priorities[rand.nextInt(priorities.length)];
+        task.setPriority(randomPriority);
+        task.setDone(faker.bool().bool());
+        return task;
     }
 }
