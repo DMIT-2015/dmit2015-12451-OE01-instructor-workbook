@@ -38,7 +38,7 @@ public class Task {
     public static Task of(Faker faker) {
         var task = new Task();
         task.setId(UUID.randomUUID().toString());
-        task.setDescription(faker.seinfeld().quote());
+        task.setDescription(faker.fallout().quote());
         String[] priorities = {"Low","Medium","High"};
         RandomGenerator rand = RandomGenerator.getDefault();
         String randomPriority = priorities[rand.nextInt(priorities.length)];
