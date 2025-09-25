@@ -1,0 +1,9 @@
+###
+PUT https://dmit2015-1251-swuoe01-default-rtdb.europe-west1.firebasedatabase.app/users/jack/name.json
+Content-Type: application/json
+
+{ "first": "Jack", "last": "Sparrow" }
+
+###
+
+
