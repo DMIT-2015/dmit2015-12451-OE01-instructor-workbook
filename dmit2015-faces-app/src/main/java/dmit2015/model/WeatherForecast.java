@@ -39,7 +39,7 @@ public class WeatherForecast {
         currentWeather.setId(UUID.randomUUID().toString());
         currentWeather.setCity(faker.address().city());
         currentWeather.setDate(LocalDate.now());
-        currentWeather.setTemperatureCelsius(faker.number().numberBetween(0, 100));
+        currentWeather.setTemperatureCelsius(faker.number().numberBetween(-30, 35));
         return currentWeather;
     }
 }
