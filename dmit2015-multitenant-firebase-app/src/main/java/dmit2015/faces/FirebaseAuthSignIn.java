@@ -2,7 +2,6 @@ package dmit2015.faces;
 
 import dmit2015.model.FirebaseAuthSignInResponsePayload;
 import dmit2015.service.FirebaseAuthService;
-import dmit2015.service.FirebaseAuthSignInSession;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
