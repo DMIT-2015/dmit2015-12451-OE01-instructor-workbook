@@ -1,5 +1,9 @@
 package dmit2015.model;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.datafaker.Faker;
@@ -13,8 +17,12 @@ import java.util.random.RandomGenerator;
 public class WeatherForecast {
 
     private String id;
+    @NotBlank(message = "City value cannot be blank.")
     private String city;
+    @Future(message = "Date must be in the future.")
     private LocalDate date;
+    @Min(value = -40, message = "TempC must between -40 and 40")
+    @Max(value = 40, message = "TempC must between -40 and 40")
     private int temperatureCelsius;
 
     public int getTemperatureFahrenheit() {
