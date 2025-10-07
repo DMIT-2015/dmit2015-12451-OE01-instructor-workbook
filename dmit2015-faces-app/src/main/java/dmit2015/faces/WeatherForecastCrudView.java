@@ -25,7 +25,8 @@ public class WeatherForecastCrudView implements Serializable {
 
     @Inject
 //    @Named("memoryWeatherForecastService")
-    @Named("firebaseHttpClientWeatherForecastService")
+//    @Named("firebaseHttpClientWeatherForecastService")
+    @Named("jakartaPersistenceWeatherForecastService")
     private WeatherForecastService weatherForecastService;
 
     /**

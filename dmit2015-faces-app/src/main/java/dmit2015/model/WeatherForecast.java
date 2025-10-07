@@ -1,5 +1,8 @@
 package dmit2015.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -14,9 +17,13 @@ import java.util.random.RandomGenerator;
 
 @Data
 @NoArgsConstructor
+@Entity
 public class WeatherForecast {
 
+    @Id
+    @Column(name = "weatherid", nullable = false, unique = true)
     private String id;
+
     @NotBlank(message = "City value cannot be blank.")
     private String city;
     @Future(message = "Date must be in the future.")

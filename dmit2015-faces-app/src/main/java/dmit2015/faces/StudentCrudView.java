@@ -1,7 +1,7 @@
 package dmit2015.faces;
 
-import dmit2015.model.Task;
-import dmit2015.service.TaskService;
+import dmit2015.model.Student;
+import dmit2015.service.StudentService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -11,46 +11,51 @@ import lombok.Setter;
 import net.datafaker.Faker;
 import org.omnifaces.util.Messages;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.file.UploadedFile;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.List;
 
 /**
  * This Jakarta Faces backing bean class contains the data and event handlers
  * to perform CRUD operations using a PrimeFaces DataTable configured to perform CRUD.
  */
-@Named("currentTaskCrudView")
+@Named("currentStudentCrudView")
 @ViewScoped // create this object for one HTTP request and keep in memory if the next is for the same page
-public class TaskCrudView implements Serializable {
+public class StudentCrudView implements Serializable {
+
+    @Getter @Setter
+    private UploadedFile imageFileUpload;
 
     @Inject
-//    @Named("memoryTaskService")
-//    @Named("firebaseHttpClientTaskService")
-    @Named("jakartaPersistenceTaskService")
-    private TaskService taskService;
+//    @Named("memoryStudentService")
+//    @Named("firebaseHttpClientStudentService")
+    @Named("jakartaPersistenceStudentService")
+    private StudentService studentService;
 
     /**
-     * The selected Task instance to create, edit, update or delete.
+     * The selected Student instance to create, edit, update or delete.
      */
     @Getter
     @Setter
-    private Task selectedTask;
+    private Student selectedStudent;
 
     /**
-     * The unique name of the selected Task instance.
+     * The unique name of the selected Student instance.
      */
     @Getter
     @Setter
     private String selectedId;
 
     /**
-     * The list of Task objects fetched from the data source
+     * The list of Student objects fetched from the data source
      */
     @Getter
-    private List<Task> tasks;
+    private List<Student> students;
 
     /**
-     * Fetch all Task from the data source.
+     * Fetch all Student from the data source.
      * <p>
      * If FacesContext message sent from init() method annotated with @PostConstruct in the Faces backing bean class are not shown on page:
      * 1) Remove the @PostConstruct annotation from the Faces backing bean class
@@ -63,18 +68,18 @@ public class TaskCrudView implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            tasks = taskService.getAllTasks();
+            students = studentService.getAllStudents();
         } catch (Exception e) {
-            Messages.addGlobalError("Error getting tasks %s", e.getMessage());
+            Messages.addGlobalError("Error getting students %s", e.getMessage());
         }
     }
 
     /**
      * Event handler for the New button on the Faces crud page.
-     * Create a new selected Task instance to enter data for.
+     * Create a new selected Student instance to enter data for.
      */
     public void onOpenNew() {
-        selectedTask = new Task();
+        selectedStudent = new Student();
         selectedId = null;
     }
 
@@ -87,8 +92,8 @@ public class TaskCrudView implements Serializable {
     public void onGenerateData() {
         try {
             var faker = new Faker();
-            selectedTask = Task.of(faker);
-            selectedTask.setId(selectedId);
+            selectedStudent = Student.of(faker);
+            selectedStudent.setId(selectedId);
         } catch (Exception e) {
             Messages.addGlobalError("Error generating data {0}", e.getMessage());
         }
@@ -101,28 +106,37 @@ public class TaskCrudView implements Serializable {
     public void onSave() {
         try {
 
+            // Check if image file uploaded
+            if (imageFileUpload != null) {
+                // Convert the contents of the uploaded file to a base64 string
+                String base64EncodedString = Base64.getEncoder().encodeToString(imageFileUpload.getContent());
+                // Create a data uri to embed the image
+                String imageDataUri = String.format("data:image;base64,%s", base64EncodedString);
+                selectedStudent.setPicture(imageDataUri);
+            }
+
             // If selectedId is null then create new data otherwise update current data
             if (selectedId == null) {
-                Task createdTask = taskService.createTask(selectedTask);
+                Student createdStudent = studentService.createStudent(selectedStudent);
 
                 // Send a Faces info message that create was successful
-                Messages.addGlobalInfo("Create was successful. {0}", createdTask.getId());
+                Messages.addGlobalInfo("Create was successful. {0}", createdStudent.getId());
                 // Reset the selected instance to null
-                selectedTask = null;
+                selectedStudent = null;
 
             } else {
-                taskService.updateTask(selectedTask);
+                studentService.updateStudent(selectedStudent);
 
                 Messages.addGlobalInfo("Update was successful");
 
             }
 
             // Fetch a list of objects from the data source
-            tasks = taskService.getAllTasks();
-            PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-Tasks");
+            students = studentService.getAllStudents();
+            PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-Students");
 
             // Hide the PrimeFaces dialog
-            PrimeFaces.current().executeScript("PF('manageTaskDialog').hide()");
+            PrimeFaces.current().executeScript("PF('manageStudentDialog').hide()");
         } catch (RuntimeException ex) { // handle application generated exceptions
             Messages.addGlobalError(ex.getMessage());
         } catch (Exception ex) {    // handle system generated exceptions
@@ -138,13 +152,13 @@ public class TaskCrudView implements Serializable {
     public void onDelete() {
         try {
             // Get the unique name of the Json object to delete
-            selectedId = selectedTask.getId();
-            taskService.deleteTaskById(selectedId);
+            selectedId = selectedStudent.getId();
+            studentService.deleteStudentById(selectedId);
             Messages.addGlobalInfo("Delete was successful for id of {0}", selectedId);
             // Fetch new data from the data source
-            tasks = taskService.getAllTasks();
+            students = studentService.getAllStudents();
 
-            PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-Tasks");
+            PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-Students");
         } catch (RuntimeException ex) { // handle application generated exceptions
             Messages.addGlobalError(ex.getMessage());
         } catch (Exception ex) {    // handle system generated exceptions
