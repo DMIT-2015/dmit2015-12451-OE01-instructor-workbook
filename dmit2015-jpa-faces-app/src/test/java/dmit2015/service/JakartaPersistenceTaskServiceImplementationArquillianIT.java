@@ -55,10 +55,7 @@ public class JakartaPersistenceTaskServiceImplementationArquillianIT { // The cl
                 .addAsLibraries(pomFile.resolve("com.microsoft.sqlserver:mssql-jdbc:13.2.0.jre11").withTransitivity().asFile())
                 .addAsLibraries(pomFile.resolve("com.oracle.database.jdbc:ojdbc11:23.9.0.25.07").withTransitivity().asFile())
                 .addAsLibraries(pomFile.resolve("org.postgresql:postgresql:42.7.7").withTransitivity().asFile())
-//                .addAsLibraries(pomFile.resolve("com.mysql:mysql-connector-j:9.2.0").withTransitivity().asFile())
-//                .addAsLibraries(pomFile.resolve("org.mariadb.jdbc:mariadb-java-client:3.5.3").withTransitivity().asFile())
-                // .addAsLibraries(pomFile.resolve("org.hibernate.orm:hibernate-spatial:6.6.28.Final").withTransitivity().asFile())
-                // .addAsLibraries(pomFile.resolve("org.eclipse:yasson:3.0.4").withTransitivity().asFile())
+//                .addAsLibraries(pomFile.resolve("org.hibernate.validator:hibernate-validator:9.0.1.Final").withTransitivity().asFile())
                 .addClass(ApplicationConfig.class)
                 .addClasses(Task.class, TaskService.class, JakartaPersistenceTaskService.class)
 //                .addAsLibraries(pomFile.resolve("jakarta.platform:jakarta.jakartaee-api:10.0.0").withTransitivity().asFile())
@@ -220,34 +217,33 @@ public class JakartaPersistenceTaskServiceImplementationArquillianIT { // The cl
 
     }
 
-//    @Order(6)
-//    @ParameterizedTest
-//    @CsvSource(value = {
-//            ", Low, false, Description cannot be blank",
-//            "Task 1, High, true, 'Priority must be Low, Medium, or High'",
-//    }, nullValues = {"null"})
-//    void givenEntityWithValidationErrors_whenAddEntity_thenThrowException(
-//            String description,
-//            String priority,
-//            boolean done,
-//            String expectedExceptionMessage
-//    ) {
-//        // Arrange
-//        Task newTask = new Task();
-//        newTask.setDescription(description);
-//        newTask.setPriority(priority);
-//        newTask.setDone(done);
-//
-//        try {
-//            // Act
-//            taskService.createTask(newTask);
-//            fail("An bean validation constraint should have been thrown");
-//        } catch (Exception ex) {
-//            // Assert
-//            assertThat(ex)
-//                    .hasMessageContaining(expectedExceptionMessage);
-//        }
-//
-//    }
+    @Order(6)
+    @ParameterizedTest
+    @CsvSource(value = {
+            ", Low, false, Description cannot be blank",
+            "Task 1, High, true, 'Priority must be Low, Medium, or High'",
+    }, nullValues = {"null"})
+    void givenEntityWithValidationErrors_whenAddEntity_thenThrowException(
+            String description,
+            String priority,
+            boolean done,
+            String expectedExceptionMessage
+    ) {
+        // Arrange
+        Task newTask = new Task();
+        newTask.setDescription(description);
+        newTask.setPriority(priority);
+        newTask.setDone(done);
+
+        try {
+            // Act
+            taskService.createTask(newTask);
+            fail("An bean validation constraint should have been thrown");
+        } catch (Exception ex) {
+            // Assert
+            assertThat(ex)
+                    .hasMessageContaining(expectedExceptionMessage);
+        }
+    }
 
 }
