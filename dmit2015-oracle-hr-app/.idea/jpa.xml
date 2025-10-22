@@ -4,4 +4,9 @@
     <option name="reLastEntityCreationPackage" value="src/main/java/dmit2015/entity" />
     <option name="reverseEngineeringLastDbConnectionId" value="594f2de7-7d6e-4c33-8228-b47e05327b1f__HR" />
   </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="dmit2015-oracle-hr-app" name="oracle-jpa-hr-pu" framework="JPA" ormUnit="dmit2015-oracle-hr-app:oracle-jpa-hr-pu" defaultDataSourceId="594f2de7-7d6e-4c33-8228-b47e05327b1f" />
+    </persistence-units>
+  </component>
 </project>
