@@ -28,7 +28,23 @@
                 scrollHeight="350"
                 />
                     </div>
+                    <p:commandButton id="searchButton"
+                                     value="Search"
+                                     actionListener="#{employeeQueryView.onSubmit()}"
+                                     update=":growl :messages dataTable"/>
 
+                    <p:dataTable id="dataTable"
+                                 value="#{employeeQueryView.queryResults}"
+                                 var="it"
+                                 rowKey="#{it.id}">
+                        <p:column headerText="Employee Name">
+                            <h:outputText value="#{it.firstName} #{it.lastName}" />
+                        </p:column>
+
+                        <p:column headerText="Department Name">
+                            <h:outputText value="#{it.department.departmentName}" />
+                        </p:column>
+                    </p:dataTable>
 
                 </p:panel>
             </h:form>

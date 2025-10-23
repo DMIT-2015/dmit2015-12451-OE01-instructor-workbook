@@ -1,6 +1,7 @@
 package dmit2015.persistence;
 
 import dmit2015.entity.Department;
+import dmit2015.entity.Employee;
 import jakarta.data.repository.Find;
 import jakarta.data.repository.Query;
 import jakarta.data.repository.Repository;
@@ -15,4 +16,7 @@ public interface HumanResourcesRepository {
 
     @Find
     Department departmentByDepartmentId(Short id);
+
+    @Query("select e from Employee e join fetch e.manager join fetch e.job join fetch e.department where e.department.id = ?1")
+    List<Employee> employeesBy(Short departmentId);
 }
