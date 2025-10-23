@@ -19,7 +19,7 @@
 
     <!-- Define additional stylesheets in child templates -->
     <ui:insert name="externalstyles">
-        <h:outputStylesheet name="css/styles.css"/>
+<!--        <h:outputStylesheet name="css/styles.css"/>-->
         <h:outputStylesheet library="webjars" name="primeflex/4.0.0/primeflex.min.css"/>
         <h:outputStylesheet library="webjars" name="primeflex/4.0.0/themes/primeone-light.css"/>
     </ui:insert>
@@ -38,6 +38,8 @@
                     <ui:insert name="navigation">
                         <p:menubar role="navigation">
                             <p:menuitem value="Home" icon="pi pi-home" outcome="/index"/>
+
+<p:menuitem value="Find Employees" icon="pi pi-search" outcome="/search/findEmployee"/>
 
                             <!-- Example submenu scaffold
                             <p:submenu label="Students" icon="pi pi-users">
