@@ -33,17 +33,37 @@
                                      actionListener="#{employeeQueryView.onSubmit()}"
                                      update=":growl :messages dataTable"/>
 
+                    <p:commandButton id="clearButton"
+                                     value="Clear"
+                                     actionListener="#{employeeQueryView.onClear()}"
+                                     update="dataTable @form" />
+
                     <p:dataTable id="dataTable"
                                  value="#{employeeQueryView.queryResults}"
                                  var="it"
                                  rowKey="#{it.id}">
                         <p:column headerText="Employee Name">
-                            <h:outputText value="#{it.firstName} #{it.lastName}" />
+                            <h:outputText value="#{it.fullName}" />
+                        </p:column>
+
+                        <p:column headerText="Job Title">
+                            <h:outputText value="#{it.job.jobTitle}" />
+                        </p:column>
+
+                        <p:column headerText="Salary">
+                            <h:outputText value="#{it.salary}">
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
                         </p:column>
 
                         <p:column headerText="Department Name">
                             <h:outputText value="#{it.department.departmentName}" />
                         </p:column>
+
+                        <p:column headerText="Manager">
+                            <h:outputText value="#{(it.manager == null ? 'No Manager' : it.manager.fullName)}" />
+                        </p:column>
+
                     </p:dataTable>
 
                 </p:panel>
