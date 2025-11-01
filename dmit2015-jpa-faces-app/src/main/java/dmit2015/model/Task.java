@@ -30,6 +30,9 @@ public class Task implements Serializable {
 
     private static final Logger logger = Logger.getLogger(Task.class.getName());
 
+    @Column(length=32, nullable = false)
+    private String username;
+
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "taskid", nullable = false)

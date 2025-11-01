@@ -2,21 +2,23 @@ package dmit2015.service;
 
 import dmit2015.model.Task;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
-
 import java.util.UUID;
-import java.util.random.RandomGenerator;
 
 @Named("jakartaPersistenceTaskService")
 @ApplicationScoped
 public class JakartaPersistenceTaskService implements TaskService {
+
+    @Inject
+    private SecurityContext _securityContext;
 
     // Assign a unitName if there are more than one persistence unit defined in persistence.xml
     @PersistenceContext (unitName="postgresql-jpa-pu")
@@ -28,6 +30,11 @@ public class JakartaPersistenceTaskService implements TaskService {
         // If the primary key is not an identity column then write code below here to
         // 1) Generate a new primary key value
         // 2) Set the primary key value for the new entity
+        String username = _securityContext.getCallerPrincipal().getName();
+        if (username.equalsIgnoreCase("anonymous")) {
+            throw new SecurityException("Access denied. Anonymous users are not allowed.");
+        }
+        task.setUsername(username);
         task.setId(UUID.randomUUID().toString());
         entityManager.persist(task);
         return task;
@@ -49,8 +56,25 @@ public class JakartaPersistenceTaskService implements TaskService {
 
     @Override
     public List<Task> getAllTasks() {
-        return entityManager.createQuery("SELECT o FROM Task o ", Task.class)
-                .getResultList();
+        // Anonymous users are not allowed
+        // Shipping role can view their own tasks
+        // Sales role can view all tasks
+        String username = _securityContext.getCallerPrincipal().getName();
+        if (username.equalsIgnoreCase("anonymous")) {
+            throw new SecurityException("Access denied. Anonymous users are not allowed.");
+        }
+        boolean hasShippingRole = _securityContext.isCallerInRole("Shipping");
+        if (hasShippingRole) {
+            return entityManager.createQuery("SELECT o FROM Task o WHERE o.username = :uname", Task.class)
+                    .setParameter("uname", username)
+                    .getResultList();
+        }
+        boolean hasSalesRole = _securityContext.isCallerInRole("Sales");
+        if (hasSalesRole) {
+            return entityManager.createQuery("SELECT o FROM Task o ", Task.class)
+                    .getResultList();
+        }
+        throw new SecurityException("Access denied. Your role does not allow you to access this resource.");
     }
 
     @Override
@@ -80,6 +104,10 @@ public class JakartaPersistenceTaskService implements TaskService {
         Optional<Task> optionalTask = getTaskById(id);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.orElseThrow();
+            String username = _securityContext.getCallerPrincipal().getName();
+            if (!task.getUsername().equals(username)) {
+                throw new SecurityException("Access denied. You cannot delete data owned another user.");
+            }
             // Write code to throw a RuntimeException if this entity contains child records
             entityManager.remove(task);
         } else {
