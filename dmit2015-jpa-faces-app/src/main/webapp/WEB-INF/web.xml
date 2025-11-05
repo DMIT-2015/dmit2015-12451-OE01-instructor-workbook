@@ -15,7 +15,8 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>TaskResources</web-resource-name>
-            <url-pattern>/tasks/*</url-pattern>
+            <url-pattern>/tasks/manage.xhtml</url-pattern>
+            <url-pattern>/tasks/manage</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>Shipping</role-name>
