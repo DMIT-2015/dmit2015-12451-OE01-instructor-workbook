@@ -1,0 +1,5 @@
+### GET request to example server
+GET http://localhost:8080/restapi/hr/Regions
+
+###
+GET http://localhost:8080/restapi/hr/jobs
