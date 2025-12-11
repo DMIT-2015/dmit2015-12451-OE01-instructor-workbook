@@ -21,6 +21,7 @@
 
     <ui:define name="maincontent">
         <f:metadata>
+            <f:viewAction action="#{loginSession.checkForToken}" />
             <f:viewParam name="dummy" />
             <f:event type="postInvokeAction" listener="#{currentTodoItemDtoCrudView.init}" />
         </f:metadata>

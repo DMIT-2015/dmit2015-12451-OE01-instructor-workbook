@@ -1,0 +1,3 @@
+### Get all TodoItemDtos
+GET http://localhost:8090/restapi/TodoItemDtos
+Authorization: Bearer {{sales_accesstoken}}

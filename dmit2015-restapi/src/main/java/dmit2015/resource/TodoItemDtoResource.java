@@ -5,13 +5,19 @@ import dmit2015.entity.TodoItem;
 import dmit2015.dto.TodoItemDto;
 import dmit2015.mapper.TodoItemMapper;
 import dmit2015.repository.TodoItemRepository;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.ClaimValue;
+import org.eclipse.microprofile.jwt.Claims;
 
 import java.net.URI;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +32,17 @@ import java.util.stream.Collectors;
 public class TodoItemDtoResource {
 
     @Inject
+    @Claim(standard = Claims.upn)   // The username for the user.
+    private ClaimValue<Optional<String>> optionalUsername;
+
+    @Inject
+    @Claim(standard = Claims.groups)    // The roles that the subject is a member of.
+    private ClaimValue<Optional<Set<String>>> optionalGroups;
+
+    @Inject
     private TodoItemRepository todoItemRepository;
 
+    @RolesAllowed({"Sales","Shipping","IT"})
     @GET    // This method only accepts HTTP GET requests.
     public Response findAllTodoItemsTodoItems() {
         return Response.ok(
@@ -49,6 +64,7 @@ public class TodoItemDtoResource {
         return Response.ok(dto).build();
     }
 
+    @RolesAllowed("Sales")
     @POST    // This method only accepts HTTP POST requests.
     public Response createTodoItemTodoItem(TodoItemDto dto, @Context UriInfo uriInfo) {
         TodoItem newTodoItem = TodoItemMapper.INSTANCE.toEntity(dto);
@@ -85,6 +101,7 @@ public class TodoItemDtoResource {
                 .build();
     }
 
+    @RolesAllowed("Shipping")
     @PUT            // This method only accepts HTTP PUT requests.
     @Path("{id}")    // This method accepts a path parameter and gives it a name of id
     public Response updateTodoItemTodoItem(@PathParam("id") Long id, TodoItemDto dto) {
@@ -130,6 +147,7 @@ public class TodoItemDtoResource {
         return Response.ok(updatedDto).build();
     }
 
+    @RolesAllowed("IT")
     @DELETE            // This method only accepts HTTP DELETE requests.
     @Path("{id}")    // This method accepts a path parameter and gives it a name of id
     public Response deleteTodoItemTodoItem(@PathParam("id") Long id) {

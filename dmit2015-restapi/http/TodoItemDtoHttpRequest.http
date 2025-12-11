@@ -1,5 +1,6 @@
 ### Get all TodoItemDtos
 GET http://localhost:8090/restapi/TodoItemDtos
+Authorization: Bearer {{salesToken}}
 
 ### Get a single TodoItem with an id of 1
 GET http://localhost:8090/restapi/TodoItemDtos/1
